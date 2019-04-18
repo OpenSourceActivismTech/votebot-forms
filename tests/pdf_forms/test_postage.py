@@ -29,7 +29,7 @@ def create_sos_address_checks(state):
             assert shipment.id is not None
             lowest_rate = shipment.lowest_rate()
             assert lowest_rate.carrier == 'USPS'
-            assert lowest_rate.rate == '0.47'
+            assert lowest_rate.rate == '0.50'
         else:
             assert 'warning' in to_address
     return check_shipment

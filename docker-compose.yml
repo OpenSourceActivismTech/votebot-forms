@@ -1,0 +1,37 @@
+version: '3.7'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    command: python manager.py runserver --host 0.0.0.0
+    environment:
+      - EASYPOST_API_KEY=[YOUR_EASYPOST_API_KEY]
+      - LOB_API_KEY=[YOUR_LOB_API_KEY]
+      - AWS_ACCESS_KEY=[YOUR_AWS_ACCESS_KEY]
+      - AWS_SECRET_KEY=[YOUR_AWS_SECRET_KEY]
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - redis
+      - db
+
+  worker:
+    build: .
+    command: python manager.py rq worker 
+    environment:
+      - AWS_ACCESS_KEY=[YOUR_AWS_ACCESS_KEY]
+      - AWS_SECRET_KEY=[YOUR_AWS_SECRET_KEY]
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:3-alpine
+
+  db:
+    image: postgres
+    ports:
+    - "5432:5432"
