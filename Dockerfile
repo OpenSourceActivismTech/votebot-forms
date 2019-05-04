@@ -11,8 +11,5 @@ RUN apk add --no-cache --virtual .pynacl_deps build-base python3-dev libffi-dev 
 # add the code 
 ADD . /usr/src/app
 
-# expose port 5000
-EXPOSE 5000
-
 # install requirements
 RUN pip install -r /usr/src/app/requirements/development.txt

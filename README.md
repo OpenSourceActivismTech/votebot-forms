@@ -84,10 +84,8 @@ If the registration POST data has a flag `mail_letter` set to true, we will prin
 The `include_postage` and `mail_letter` flags are not mutually exclusive, you must enable both to mail a letter with an included postage label.
 
 ## Development
-- `virtualenv .venv; source .venv/bin/activate`
-- `pip install -r requirements/development.txt`
-- `python manager.py runserver`
-- in another terminal `python manager.py rq worker`
+- `docker-compose build`
+- `docker-compose up`
 
 ## Adding new states
 Votebot-forms can only work with states that have online voter registration systems (OVR) without access control (user login, captcha, etc). Because we are submitting on behalf of the user, we will not do any work to circumvent access controls. 
@@ -123,15 +121,12 @@ To create a new state integration:
       legal_resident:true
       disenfranchised:false
 `
-- run `python tests/run.py`
+- ssh into the web container `docker-compose run web bash`
+- run `nosetests tests/`
 
 ## Security
 - Requires PyOpenSSL and ndg-httpsclient for improved SSL certificate validation. California's system won't validate without it...
 - If an environment variable `VOTEBOT_API_KEY` is set, we will require all POSTs to registration endpoints /pdf and /ovr to include it in an HTTP Basic Auth header.
 
 ## Deployment
-- runs on Heroku under uwsgi w/ gevent
-- use included compiled pdftk 2.02 binaries with
-  `heroku config:set LD_LIBRARY_PATH=/app/.heroku/vendor/lib:/app/vendor/pdftk/lib`
-  `heroku config:set PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin:/app/vendor/pdftk/bin`
-- alternately, write a Dockerfile for your favorite cloud host (and send us a pull-request?)
+- [WIP]
