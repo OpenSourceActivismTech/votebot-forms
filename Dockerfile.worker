@@ -13,20 +13,11 @@ ADD . /app
 
 # add the env vars
 ENV FLASK_APP=app/wsgi.py \
-    EASYPOST_API_KEY= \
-    LOB_API_KEY= \
     AWS_ACCESS_KEY= \
-    AWS_SECRET_KEY= \
-    SENTRY_DSN= \
-    SMARTY_STREETS_AUTH_ID= \
-    SMARTY_STREETS_AUTH_TOKEN=
-
-# expose the port
-EXPOSE 5000:5000
+    AWS_SECRET_KEY=
 
 # install requirements
 RUN pip install -r /app/requirements/development.txt
 #RUN pip install -r /app/requirements/heroku.txt
 
-# start the server
-CMD flask run --host 0.0.0.0
+CMD flask rq worker 

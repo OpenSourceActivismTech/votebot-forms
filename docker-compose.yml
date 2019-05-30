@@ -1,45 +1,35 @@
-version: '3.7'
+version: '3'
 
 services:
   web:
     build: .
     ports:
-      - "5000:5000"
-    command: flask run --host 0.0.0.0
+      - 5000:5000
     environment:
-      - EASYPOST_API_KEY=[YOUR_EASYPOST_API_KEY]
-      - LOB_API_KEY=[YOUR_LOB_API_KEY]
-      - AWS_ACCESS_KEY=[YOUR_AWS_ACCESS_KEY]
-      - AWS_SECRET_KEY=[YOUR_AWS_SECRET_KEY]
-      - SENTRY_DSN=[YOUR_SENTRY_DSN]
-      - SMARTY_STREETS_AUTH_ID=[YOUR_SMARTY_STREETS_AUTH_ID]
-      - SMARTY_STREETS_AUTH_TOKEN=[YOUR_SMARTY_STREETS_AUTH_TOKEN]
+      - DATABASE_URL=postgres://postgres:password@db/postgres
       - DEBUG_SUBMIT=TRUE
-    volumes:
-      - .:/usr/src/app
     depends_on:
       - redis
       - db
 
   worker:
-    build: .
-    command: flask rq worker
-    environment:
-      - FLASK_APP=app/wsgi.py
-      - AWS_ACCESS_KEY=[YOUR_AWS_ACCESS_KEY]
-      - AWS_SECRET_KEY=[YOUR_AWS_SECRET_KEY]
-    volumes:
-      - .:/usr/src/app
+    build: 
+      context: .
+      dockerfile: Dockerfile.worker
     depends_on:
       - redis
       - db
 
   redis:
-    image: redis:3-alpine
+    image: redis:3-alpine 
+    ports: 
+      - "6379"
 
   db:
     image: postgres:10.7-alpine
     environment:
-      - POSTGRES_PASSWORD=[POSTGRES_PASSWORD]
+      - POSTGRES_PASSWORD=password
       - POSTGRES_USER=postgres
       - POSTGRES_DB=votebot-forms
+    ports: 
+      - "5432"

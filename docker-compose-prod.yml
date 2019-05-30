@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  web:
+    image: us.gcr.io/vote-with-me/votebot-forms_web:v5
+    ports:
+      - 5000:5000
+    environment:
+      - DATABASE_URL=postgres://postgres:password@[INTERNAL_IP]/postgres
+    links:
+      - redis
+    labels:
+      kompose.service.type: LoadBalancer 
+
+  worker:
+    image: us.gcr.io/vote-with-me/votebot-forms_worker:v5
+    environment:
+      - DATABASE_URL=postgres://postgres:password@10.61.240.3/postgres
+    links:
+      - redis
+
+  redis:
+    image: k8s.gcr.io/redis
+    ports: 
+      - "6379"
