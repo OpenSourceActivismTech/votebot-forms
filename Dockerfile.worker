@@ -17,7 +17,7 @@ ENV FLASK_APP=app/wsgi.py \
     AWS_SECRET_KEY=
 
 # install requirements
-RUN pip install -r /app/requirements/development.txt
-#RUN pip install -r /app/requirements/heroku.txt
+#RUN pip install -r /app/requirements/development.txt
+RUN pip install -r /app/requirements/heroku.txt
 
-CMD flask rq worker 
+CMD flask rq worker

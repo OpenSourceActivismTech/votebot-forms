@@ -25,8 +25,8 @@ ENV FLASK_APP=app/wsgi.py \
 EXPOSE 5000:5000
 
 # install requirements
-RUN pip install -r /app/requirements/development.txt
-#RUN pip install -r /app/requirements/heroku.txt
+#RUN pip install -r /app/requirements/development.txt
+RUN pip install -r /app/requirements/heroku.txt
 
 # start the server
 CMD flask run --host 0.0.0.0
