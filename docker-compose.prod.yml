@@ -7,6 +7,7 @@ services:
       - 5000:5000
     environment:
       - DATABASE_URL=postgres://postgres:password@[PRIVATE_IP]/postgres
+      - SENTRY_DSN=
     links:
       - redis
     labels:
@@ -16,6 +17,7 @@ services:
     image: us.gcr.io/vote-with-me/votebot-forms_worker:v7
     environment:
       - DATABASE_URL=postgres://postgres:password@[PRIVATE_IP]/postgres
+      - SENTRY_DSN=
     links:
       - redis
 
