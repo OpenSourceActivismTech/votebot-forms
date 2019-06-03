@@ -129,4 +129,12 @@ To create a new state integration:
 - If an environment variable `VOTEBOT_API_KEY` is set, we will require all POSTs to registration endpoints /pdf and /ovr to include it in an HTTP Basic Auth header.
 
 ## Deployment
-- [WIP]
+VBF is set up to deploy on kubernetes using a managed database service and container registry.
+
+To deploy:
+ - uncomment the `heroku` requirements in the dockerfiles and build the production images: `docker-compose build`
+ - tag the images: `docker tag [SOURCE_IMAGE] [HOSTNAME]/[PROJECT-ID]/[IMAGE]:[TAG]`
+ - push the tagged images to the container registry: `docker push [HOSTNAME]/[PROJECT-ID]/[IMAGE]`
+ - update the `image` in `docker-compose.prod.yml` to point to the newly tagged images
+ - update `ENV` vars in `docker-compose.prod.yml` with the IP of the database host and other production vars
+ - create the Kubernetes deployment with `kompose up -f docker-compose.prod.yml`
