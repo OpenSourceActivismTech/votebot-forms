@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  web:
+    image: us.gcr.io/vote-with-me/votebot-forms_web:v7
+    ports:
+      - 5000:5000
+    environment:
+      - DATABASE_URL=postgres://postgres:password@[PRIVATE_IP]/postgres
+      - SENTRY_DSN=
+    links:
+      - redis
+    labels:
+      kompose.service.type: LoadBalancer 
+
+  worker:
+    image: us.gcr.io/vote-with-me/votebot-forms_worker:v7
+    environment:
+      - DATABASE_URL=postgres://postgres:password@[PRIVATE_IP]/postgres
+      - SENTRY_DSN=
+    links:
+      - redis
+
+  redis:
+    image: k8s.gcr.io/redis
+    ports:
+      - "6379"

@@ -1,0 +1,23 @@
+# base image
+FROM python:2.7-alpine3.6
+
+# set working directory
+RUN mkdir -p /app
+WORKDIR /app
+
+# add a compiler
+RUN apk add --no-cache --virtual .pynacl_deps build-base python2-dev libffi-dev linux-headers postgresql-dev bash curl pdftk ghostscript
+
+# add the code 
+ADD . /app
+
+# add the env vars
+ENV FLASK_APP=app/wsgi.py \
+    AWS_ACCESS_KEY= \
+    AWS_SECRET_KEY=
+
+# install requirements
+#RUN pip install -r /app/requirements/development.txt
+RUN pip install -r /app/requirements/heroku.txt
+
+CMD flask rq worker

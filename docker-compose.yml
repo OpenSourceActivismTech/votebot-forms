@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    ports:
+      - 5000:5000
+    environment:
+      - DATABASE_URL=postgres://postgres:password@db/postgres
+      - SENTRY_DSN=
+      - DEBUG_SUBMIT=
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - db
+
+  worker:
+    build: 
+      context: .
+      dockerfile: Dockerfile.worker
+    environment:
+      - DATABASE_URL=postgres://postgres:password@db/postgres
+      - SENTRY_DSN=
+      - DEBUG_SUBMIT=
+    depends_on:
+      - redis
+      - db
+
+  redis:
+    image: redis:3-alpine 
+    ports: 
+      - "6379"
+
+  db:
+    image: postgres:10.7-alpine
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=votebot-forms
+    ports: 
+      - "5432"
